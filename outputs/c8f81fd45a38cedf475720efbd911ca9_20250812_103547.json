@@ -1,0 +1,6 @@
+{
+  "text": "Get started with ROSA\nRed Hat OpenShift Service on AWS (ROSA) is a managed service that you can use to build, scale, and deploy containerized applications with the Red Hat OpenShift enterprise Kubernetes platform on AWS.\nYou can use the following guides to create your first ROSA cluster, grant user access, deploy your first application, and learn how to revoke user access and delete your cluster.\n-\nCreate a ROSA with HCP cluster using the ROSA CLI - Create your first ROSA with HCP cluster using AWS STS and the ROSA CLI.\n-\nCreate a ROSA classic cluster that uses AWS PrivateLink - Create your first ROSA classic cluster using AWS PrivateLink.\n-\nCreate a ROSA classic cluster using the ROSA CLI - Create your first ROSA classic cluster using AWS STS and the ROSA CLI.",
+  "title": "Get started with ROSA",
+  "author": "",
+  "date": ""
+}

@@ -1,0 +1,6 @@
+{
+  "title": "Amazon EC2 resource type reference",
+  "author": null,
+  "date": null,
+  "text": "This is the new AWS CloudFormation Template Reference Guide. Please update your bookmarks and links. For help getting started with CloudFormation, see the AWS CloudFormation User Guide.\nAmazon EC2 resource type reference\nResource types\nAWS::EC2::LocalGatewayRouteTableVirtualInterfaceGroupAssociation"
+}

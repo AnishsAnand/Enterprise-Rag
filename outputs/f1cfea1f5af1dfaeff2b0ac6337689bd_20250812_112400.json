@@ -1,0 +1,6 @@
+{
+  "title": "AWS Accessibility",
+  "author": null,
+  "date": "2025-08-08",
+  "text": "Building a more accessible future\nOur vision is to be Earth’s most customer-centric company. For AWS, that means making cloud computing accessible to everyone.\nAccessibility Conformance Reports (ACRs)\nAccessibility Conformance Reports (ACRs)\nAccessibility Conformance Reports (ACRs) for AWS products and services are available on AWS Artifact, a self-service portal for AWS compliance-related information. Through AWS Artifact, you can download ACRs on-demand to understand the accessibility of a specific AWS product or service. AWS ACRs utilize the ITI Voluntary Product Accessibility Templates (VPAT®) and reference various accessibility standards including: Section 508 (U.S.), EN 301 549 (EU), and Web Content Accessibility Guidelines (WCAG).\nAfter signing into the AWS Management Console, you can access the ACRs by selecting view reports in AWS Artifact."
+}

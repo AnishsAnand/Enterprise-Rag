@@ -1,0 +1,6 @@
+{
+  "title": "AWS Architecture Center",
+  "author": null,
+  "date": "2025-08-08",
+  "text": "Get Started Architecting on AWS\nIf you're new to AWS, or just want to brush up on best practices, start with these resources.\nAWS Well-Architected\nAWS Well-Architected provides a framework to help cloud architects build secure, high-performing, resilient, and efficient architectures.AWS Well-Architected helps cloud architects build secure, high-performing, resilient, and efficient infrastructure for a variety of applications and workloads. Built around six pillars—operational excellence, security, reliability, performance efficiency, cost optimization, and sustainability—AWS Well-Architected provides a consistent approach for customers and partners to evaluate architectures and implement scalable designs.\nOverview of AWS\nDecision guides\nAWS decision guides provide an overview of our services with guidance to help you choose the services that fit your use case.\nDecision guides are now available for a range of service categories including machine learning, analytics, containers, storage, networking services, and more.\nBrowse our content\nDid you find what you were looking for today?\nLet us know so we can improve the quality of the content on our pages"
+}

@@ -1,0 +1,151 @@
+
+<div class="rag-widget" [class.expanded]="isExpanded">
+  <button class="widget-toggle" (click)="toggleWidget()">
+    <mat-icon>{{ isExpanded ? 'close' : 'smart_toy' }}</mat-icon>
+  </button>
+  <div class="widget-content" *ngIf="isExpanded">
+    <div class="widget-header">
+      <div class="header-info">
+        <mat-icon>smart_toy</mat-icon>
+        <div>
+          <h3>Enterprise RAG Bot</h3>
+         <!-- <p>{{ knowledgeStats.document_count }} documents available</p> -->
+        </div>
+      </div>
+
+      <div class="widget-header-actions">
+        <button mat-icon-button matTooltip="Minimize" (click)="toggleWidget()">
+          <mat-icon>minimize</mat-icon>
+        </button>
+        <button *ngIf="!isLoginPage" mat-icon-button color="warn" matTooltip="Logout" (click)="logout()">
+          <mat-icon>logout</mat-icon>
+        </button>
+      </div>
+    </div>
+    <mat-tab-group>
+      <mat-tab label="Chat">
+        <div class="chat-container">
+          <div class="chat-messages" #chatMessages>
+            <div *ngFor="let message of chatHistory" [ngClass]="{'user-message': message.type === 'user', 'bot-message': message.type === 'bot'}">
+              <div class="message-content">
+                <div class="message-text">{{ message.content }}</div>
+                <div class="message-time">{{ message.timestamp | date:'short' }}</div>
+              </div>
+              <div class="message-sources" *ngIf="isAdmin && message.type === 'bot' && message.sources?.length">
+                <details>
+                  <summary>Sources ({{ message?.sources?.length }})</summary>
+                  <div class="sources-list">
+                    <div *ngFor="let source of message.sources" class="source-item">
+                      <a [href]="source.url" target="_blank">{{ source.title || source.url }}</a>
+                      <span class="relevance">{{ (source.relevance_score * 100) | number:'1.0-0' }}%</span>
+                    </div>
+                  </div>
+                </details>
+              </div>
+            </div>
+
+            <div *ngIf="isTyping" class="typing-indicator">
+              <div class="typing-dots"><span></span><span></span><span></span></div>
+              <span>Bot is typing...</span>
+            </div>
+          </div>
+
+          <div class="chat-input">
+            <mat-form-field appearance="outline" class="message-input">
+              <input matInput [(ngModel)]="currentMessage" (keyup.enter)="sendMessage()" placeholder="Ask a question..." [disabled]="isTyping" />
+            </mat-form-field>
+            <button mat-fab color="primary" (click)="sendMessage()" [disabled]="!currentMessage.trim() || isTyping">
+              <mat-icon>send</mat-icon>
+            </button>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab *ngIf="isAdmin" label="Scrape">
+        <div class="scrape-container">
+          <div class="scrape-section">
+            <h4>Single URL</h4>
+            <div class="input-group">
+              <mat-form-field appearance="outline" class="url-input">
+                <mat-label>Website URL</mat-label>
+                <input matInput [(ngModel)]="scrapeUrl" placeholder="https://example.com" type="url" />
+              </mat-form-field>
+              <button mat-raised-button color="primary" (click)="scrapeSingleUrl()" [disabled]="!scrapeUrl || isScraping">
+                <mat-icon *ngIf="isScraping">hourglass_empty</mat-icon>
+                <mat-icon *ngIf="!isScraping">download</mat-icon>
+                {{ isScraping ? 'Scraping...' : 'Scrape' }}
+              </button>
+            </div>
+          </div>
+          <div class="scrape-section">
+            <h4>Bulk Scrape</h4>
+            <div class="input-group">
+              <mat-form-field appearance="outline" class="url-input">
+                <mat-label>Base URL</mat-label>
+                <input matInput [(ngModel)]="bulkScrapeUrl" placeholder="https://example.com" type="url" />
+              </mat-form-field>
+              <button mat-raised-button color="accent" (click)="bulkScrape()" [disabled]="!bulkScrapeUrl || isBulkScraping">
+                <mat-icon *ngIf="isBulkScraping">hourglass_empty</mat-icon>
+                <mat-icon *ngIf="!isBulkScraping">cloud_download</mat-icon>
+                {{ isBulkScraping ? 'Bulk Scraping...' : 'Bulk Scrape' }}
+              </button>
+            </div>
+            <p class="help-text">Auto discovers and scrapes multiple pages.</p>
+          </div>
+          <div class="scrape-section" *ngIf="isAdmin">
+            <h4>Upload File</h4>
+            <div class="upload-dropzone"
+                 (drop)="handleDrop($event)"
+                 (dragover)="allowDrop($event)">
+              <p>Drag and drop file here</p>
+              <p>or</p>
+              <button mat-stroked-button color="primary" (click)="fileInput.click()">Browse</button>
+              <input #fileInput type="file" hidden (change)="handleFileInput($event)" />
+            </div>
+            <mat-progress-spinner *ngIf="uploading" [value]="progress" mode="determinate"></mat-progress-spinner>
+            <div *ngIf="uploadStatus" class="upload-success">{{ uploadStatus }}</div>
+            <div *ngIf="uploadError" class="upload-error">{{ uploadError }}</div>
+          </div>
+          <div class="scrape-status" *ngIf="scrapeStatus">
+            <mat-card>
+              <mat-card-content>
+                <h4>{{ scrapeStatus.title }}</h4>
+                <p>{{ scrapeStatus.message }}</p>
+                <small *ngIf="scrapeStatus.details">{{ scrapeStatus.details }}</small>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab *ngIf="isAdmin" label="Knowledge">
+        <div class="knowledge-container">
+          <mat-card>
+            <mat-card-header>
+              <mat-card-title>Knowledge Base</mat-card-title>
+              <button mat-icon-button (click)="refreshStats()">
+                <mat-icon>refresh</mat-icon>
+              </button>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="stats-grid">
+                <div class="stat-item">
+                  <span class="stat-number">{{ knowledgeStats.document_count }} </span>
+                  <span class="stat-label">  Documents</span>
+                </div>
+                <div class="stat-item">
+                  <span class="stat-number">{{ knowledgeStats.status }} </span>
+                  <span class="stat-label"> Status</span>
+                </div>
+              </div>
+            </mat-card-content>
+            <mat-card-actions>
+              <button mat-raised-button color="warn" (click)="clearKnowledge()">
+                <mat-icon>delete_forever</mat-icon>
+                Clear Knowledge
+              </button>
+            </mat-card-actions>
+          </mat-card>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>
